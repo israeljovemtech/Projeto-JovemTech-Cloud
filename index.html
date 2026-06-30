@@ -2,73 +2,292 @@
 <html lang="pt-BR">
   <head>
     <meta charset="UTF-8" />
-
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Central da Copa 🏆🇧🇷</title>
 
-    <title>Olá, Nuvem</title>
+    <!-- Fontes: uma bem "personalidade" pra títulos e uma redonda/amigável pro texto -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&family=Nunito:wght@400;600;700&display=swap"
+      rel="stylesheet"
+    />
 
     <style>
+      /* ===========================
+         🎨 PALETA DA SELEÇÃO
+         =========================== */
+      :root {
+        --verde-bandeira: #0b8a3e;
+        --verde-escuro: #04231a;
+        --amarelo-ouro: #ffd400;
+        --azul-celeste: #1351b4;
+        --branco-gelo: #f6f5f0;
+        --vermelho-cartao: #e63946;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
       body {
         margin: 0;
         min-height: 100vh;
         display: grid;
         place-items: center;
-        font-family: system-ui;
-        background: #0f172a;
-        color: white;
+        font-family: "Nunito", system-ui, sans-serif;
+        color: var(--branco-gelo);
+        overflow-x: hidden;
+
+        /* Fundo em degradê verde-noite com leve "textura de bolinha de futebol" */
+        background:
+          radial-gradient(circle at 20% 20%, rgba(255, 212, 0, 0.07), transparent 40%),
+          radial-gradient(circle at 80% 0%, rgba(19, 81, 180, 0.18), transparent 45%),
+          linear-gradient(160deg, var(--verde-escuro) 0%, #062f22 55%, #07331c 100%);
+        position: relative;
+      }
+
+      /* Faixa "bandeirinha de festa" no topo da página */
+      .bandeirinhas {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 18px;
+        display: flex;
+        z-index: 2;
+      }
+      .bandeirinhas span {
+        flex: 1;
+        height: 100%;
+        clip-path: polygon(50% 100%, 0 0, 100% 0);
+        opacity: 0.9;
+      }
+      .bandeirinhas span:nth-child(4n + 1) { background: var(--verde-bandeira); }
+      .bandeirinhas span:nth-child(4n + 2) { background: var(--amarelo-ouro); }
+      .bandeirinhas span:nth-child(4n + 3) { background: var(--azul-celeste); }
+      .bandeirinhas span:nth-child(4n)     { background: var(--branco-gelo); }
+
+      /* Confete caindo de leve, pra dar clima de festa sem poluir a página */
+      .confete {
+        position: fixed;
+        top: -10px;
+        width: 8px;
+        height: 8px;
+        opacity: 0.6;
+        border-radius: 2px;
+        animation: cair linear infinite;
+        z-index: 1;
+        pointer-events: none;
+      }
+      @keyframes cair {
+        to {
+          transform: translateY(110vh) rotate(360deg);
+        }
       }
 
       main {
+        position: relative;
+        z-index: 3;
         text-align: center;
+        background: rgba(255, 255, 255, 0.04);
+        border: 1px solid rgba(255, 212, 0, 0.25);
+        backdrop-filter: blur(6px);
+        border-radius: 24px;
+        padding: 40px 32px 32px;
+        max-width: 480px;
+        width: 90vw;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.35);
       }
 
+      h1 {
+        font-family: "Baloo 2", sans-serif;
+        font-weight: 800;
+        font-size: clamp(28px, 6vw, 38px);
+        margin: 0 0 4px;
+        background: linear-gradient(90deg, var(--amarelo-ouro), #fff6c8, var(--amarelo-ouro));
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+      }
+
+      .subtitulo {
+        margin: 0 0 28px;
+        font-size: 15px;
+        color: rgba(246, 245, 240, 0.75);
+        letter-spacing: 0.3px;
+      }
+
+      /* Campo de texto estilo "crachá de torcedor" */
       input {
-        padding: 10px;
-        margin: 20px;
+        width: 100%;
+        padding: 12px 16px;
+        margin-bottom: 18px;
+        border-radius: 12px;
+        border: 2px solid transparent;
+        font-family: "Nunito", sans-serif;
+        font-size: 15px;
+        background: rgba(255, 255, 255, 0.92);
+        color: #1a1a1a;
+        outline: none;
+        transition: border-color 0.2s ease;
+      }
+      input:focus {
+        border-color: var(--amarelo-ouro);
+      }
+
+      .botoeira {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+        justify-content: center;
+        margin-bottom: 24px;
       }
 
       button {
-        padding: 12px 22px;
-        margin: 5px;
+        flex: 1;
+        min-width: 150px;
+        padding: 14px 18px;
+        border: none;
+        border-radius: 14px;
+        font-family: "Baloo 2", sans-serif;
+        font-weight: 700;
+        font-size: 15px;
         cursor: pointer;
+        color: #062f22;
+        background: linear-gradient(160deg, var(--amarelo-ouro), #ffb800);
+        box-shadow: 0 6px 0 #b88600, 0 8px 16px rgba(0, 0, 0, 0.25);
+        transition: transform 0.08s ease;
       }
 
+      button:active {
+        transform: translateY(3px);
+        box-shadow: 0 3px 0 #b88600, 0 4px 10px rgba(0, 0, 0, 0.25);
+      }
+
+      button.botao-azul {
+        color: var(--branco-gelo);
+        background: linear-gradient(160deg, var(--azul-celeste), #0c3a85);
+        box-shadow: 0 6px 0 #07265c, 0 8px 16px rgba(0, 0, 0, 0.25);
+      }
+      button.botao-azul:active {
+        box-shadow: 0 3px 0 #07265c, 0 4px 10px rgba(0, 0, 0, 0.25);
+      }
+
+      /* 🥚 EASTER EGG: o botão "treme" quando é clicado, tipo grito de gol */
+      @keyframes tremida {
+        0%, 100% { transform: translateX(0) rotate(0); }
+        15% { transform: translateX(-6px) rotate(-3deg); }
+        30% { transform: translateX(5px) rotate(3deg); }
+        45% { transform: translateX(-4px) rotate(-2deg); }
+        60% { transform: translateX(4px) rotate(2deg); }
+        75% { transform: translateX(-2px) rotate(-1deg); }
+      }
+      button.tremendo {
+        animation: tremida 0.45s ease;
+      }
+
+      /* Placar estilo "telão de estádio" */
+      .telao {
+        background: #021a12;
+        border: 2px solid rgba(255, 212, 0, 0.4);
+        border-radius: 16px;
+        padding: 18px 16px;
+        text-align: left;
+        position: relative;
+      }
+      .telao::before {
+        content: "🔴 AO VIVO — PLACAR DA CENTRAL";
+        display: block;
+        font-family: "Baloo 2", sans-serif;
+        font-size: 11px;
+        letter-spacing: 1px;
+        color: var(--amarelo-ouro);
+        margin-bottom: 10px;
+      }
       #status {
-        margin-top: 20px;
-        font-size: 18px;
+        margin: 0;
+        font-family: "Nunito", monospace;
+        font-size: 15px;
         line-height: 1.8;
+        color: #b9ffd4;
       }
     </style>
   </head>
 
   <body>
+    <!-- Bandeirinhas de festa no topo -->
+    <div class="bandeirinhas">
+      <span></span><span></span><span></span><span></span>
+      <span></span><span></span><span></span><span></span>
+      <span></span><span></span><span></span><span></span>
+    </div>
+
     <main>
-      <h1>Olá, Nuvem</h1>
+      <h1>Central da Copa</h1>
+      <p class="subtitulo">⚽ O clima é de Brasil na Copa — bora torcer! 🇧🇷</p>
 
-      <input id="nome" placeholder="Digite seu nome" />
+      <input id="nome" placeholder="Qual seu nome, torcedor?" />
 
-      <br />
+      <div class="botoeira">
+        <button id="botao-apito" class="botao-amarelo">⏰ Hora do Apito</button>
+        <button id="botao-sorteio" class="botao-azul">⚽ Número da Camisa</button>
+      </div>
 
-      <button onclick="buscarHora()">🕒 Ver Hora</button>
-
-      <button onclick="buscarSorteio()">🎲 Sortear Número</button>
-
-      <p id="status">Clique em um botão.</p>
+      <div class="telao">
+        <p id="status">Clique em um botão pra começar o jogo!</p>
+      </div>
     </main>
 
     <script>
+      // Endereço do nosso Worker (o "estádio" que responde os pedidos)
       const URL_DO_WORKER =
         "https://worker-cloud-api.israeljovemtech.workers.dev/";
 
-      async function buscarHora() {
-        const status = document.getElementById("status");
-        const nome = document.getElementById("nome").value;
+      // ===========================
+      // 🎉 CONFETES CAINDO NA TELA
+      // ===========================
+      // Cria umas bolinhas coloridas que caem devagar, só pra dar um clima
+      // de festa sem atrapalhar a leitura da página.
+      function criarConfetes() {
+        const cores = ["#0b8a3e", "#ffd400", "#1351b4", "#f6f5f0"];
 
-        status.textContent = "Buscando...";
+        for (let i = 0; i < 18; i++) {
+          const confete = document.createElement("div");
+          confete.className = "confete";
+          confete.style.left = Math.random() * 100 + "vw";
+          confete.style.background = cores[Math.floor(Math.random() * cores.length)];
+          confete.style.animationDuration = 6 + Math.random() * 6 + "s";
+          confete.style.animationDelay = Math.random() * 6 + "s";
+          document.body.appendChild(confete);
+        }
+      }
+      criarConfetes();
+
+      // ===========================
+      // 🥚 EASTER EGG: tremida no botão ao clicar
+      // ===========================
+      // Adiciona a classe "tremendo" no botão (o que dispara a animação no CSS)
+      // e tira ela depois de um tempinho, pra poder tremer de novo no próximo clique.
+      function tremerBotao(botao) {
+        botao.classList.remove("tremendo");
+        // força o navegador a "esquecer" a classe antes de adicionar de novo
+        void botao.offsetWidth;
+        botao.classList.add("tremendo");
+        setTimeout(() => botao.classList.remove("tremendo"), 450);
+      }
+
+      // ===========================
+      // ⏰ CONSULTAR HORA DO APITO (antiga buscarHora)
+      // ===========================
+      async function consultarHoraDoApito() {
+        const status = document.getElementById("status");
+        const nomeDigitado = document.getElementById("nome").value;
+
+        status.textContent = "🔄 Consultando o apito...";
 
         try {
           const resposta = await fetch(
-            URL_DO_WORKER + "hora?nome=" + encodeURIComponent(nome)
+            URL_DO_WORKER + "apito?nome=" + encodeURIComponent(nomeDigitado)
           );
 
           if (!resposta.ok) {
@@ -80,35 +299,28 @@
 
           status.innerHTML = `
             <strong>${dados.mensagem}</strong>
-
             <br><br>
-
-            🕒 <strong>Hora do servidor:</strong>
-            ${dados.horaDoServidor}
-
+            🕒 <strong>Hora do servidor:</strong> ${dados.horaDoServidor}
             <br>
-
-            💬 <strong>Frase do dia:</strong>
-            ${dados.fraseDoDia}
-
+            💬 <strong>Grito de torcida:</strong> ${dados.gritoDeTorcida}
             <br><br>
-
-            👥 <strong>Você é a visita número:</strong>
-            ${dados.visitas}
+            👥 <strong>Torcedor número:</strong> ${dados.torcedores}
           `;
         } catch {
-          status.textContent =
-            "⚠ Não foi possível conectar ao Worker.";
+          status.textContent = "⚠ Não foi possível conectar ao Worker.";
         }
       }
 
-      async function buscarSorteio() {
+      // ===========================
+      // ⚽ SORTEAR NÚMERO DA CAMISA (antiga buscarSorteio)
+      // ===========================
+      async function sortearNumeroDaCamisa() {
         const status = document.getElementById("status");
 
-        status.textContent = "Sorteando...";
+        status.textContent = "🔄 Sorteando o número da sorte...";
 
         try {
-          const resposta = await fetch(URL_DO_WORKER + "sorteio");
+          const resposta = await fetch(URL_DO_WORKER + "numero-da-sorte");
 
           if (!resposta.ok) {
             status.textContent = "❌ A rota solicitada não foi encontrada.";
@@ -118,19 +330,30 @@
           const dados = await resposta.json();
 
           status.innerHTML = `
-            🎲 <strong>Número sorteado:</strong>
-            ${dados.numero}
-
+            ⚽ <strong>Sua camisa da sorte é a número:</strong> ${dados.numeroDaCamisa}
             <br><br>
-
-            👥 <strong>Você é a visita número:</strong>
-            ${dados.visitas}
+            👥 <strong>Torcedor número:</strong> ${dados.torcedores}
           `;
         } catch {
-          status.textContent =
-            "⚠ Não foi possível conectar ao Worker.";
+          status.textContent = "⚠ Não foi possível conectar ao Worker.";
         }
       }
+
+      // ===========================
+      // 🔌 LIGANDO OS BOTÕES ÀS FUNÇÕES
+      // ===========================
+      const botaoApito = document.getElementById("botao-apito");
+      const botaoSorteio = document.getElementById("botao-sorteio");
+
+      botaoApito.addEventListener("click", () => {
+        tremerBotao(botaoApito);
+        consultarHoraDoApito();
+      });
+
+      botaoSorteio.addEventListener("click", () => {
+        tremerBotao(botaoSorteio);
+        sortearNumeroDaCamisa();
+      });
     </script>
   </body>
 </html>
