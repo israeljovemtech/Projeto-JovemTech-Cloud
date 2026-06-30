@@ -36,6 +36,7 @@
       #status {
         margin-top: 20px;
         font-size: 18px;
+        line-height: 1.8;
       }
     </style>
   </head>
@@ -48,9 +49,9 @@
 
       <br />
 
-      <button onclick="buscarHora()">Ver Hora</button>
+      <button onclick="buscarHora()">🕒 Ver Hora</button>
 
-      <button onclick="buscarSorteio()">Sortear Número</button>
+      <button onclick="buscarSorteio()">🎲 Sortear Número</button>
 
       <p id="status">Clique em um botão.</p>
     </main>
@@ -61,30 +62,43 @@
 
       async function buscarHora() {
         const status = document.getElementById("status");
-
         const nome = document.getElementById("nome").value;
 
         status.textContent = "Buscando...";
 
         try {
           const resposta = await fetch(
-            URL_DO_WORKER + "hora?nome=" + encodeURIComponent(nome),
+            URL_DO_WORKER + "hora?nome=" + encodeURIComponent(nome)
           );
 
-          // NOVO
           if (!resposta.ok) {
             status.textContent = "❌ A rota solicitada não foi encontrada.";
-
             return;
           }
 
           const dados = await resposta.json();
 
-          status.innerHTML = `<strong>${dados.mensagem}</strong><br><br>
-Hora: ${dados.horaDoServidor}<br>
-Frase: ${dados.fraseDoDia}`;
+          status.innerHTML = `
+            <strong>${dados.mensagem}</strong>
+
+            <br><br>
+
+            🕒 <strong>Hora do servidor:</strong>
+            ${dados.horaDoServidor}
+
+            <br>
+
+            💬 <strong>Frase do dia:</strong>
+            ${dados.fraseDoDia}
+
+            <br><br>
+
+            👥 <strong>Você é a visita número:</strong>
+            ${dados.visitas}
+          `;
         } catch {
-          status.textContent = "⚠ Não foi possível conectar ao Worker.";
+          status.textContent =
+            "⚠ Não foi possível conectar ao Worker.";
         }
       }
 
@@ -96,18 +110,25 @@ Frase: ${dados.fraseDoDia}`;
         try {
           const resposta = await fetch(URL_DO_WORKER + "sorteio");
 
-          // NOVO
           if (!resposta.ok) {
             status.textContent = "❌ A rota solicitada não foi encontrada.";
-
             return;
           }
 
           const dados = await resposta.json();
 
-          status.innerHTML = `Número sorteado: <strong>${dados.numero}</strong>`;
+          status.innerHTML = `
+            🎲 <strong>Número sorteado:</strong>
+            ${dados.numero}
+
+            <br><br>
+
+            👥 <strong>Você é a visita número:</strong>
+            ${dados.visitas}
+          `;
         } catch {
-          status.textContent = "⚠ Não foi possível conectar ao Worker.";
+          status.textContent =
+            "⚠ Não foi possível conectar ao Worker.";
         }
       }
     </script>
