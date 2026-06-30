@@ -67,7 +67,7 @@
         status.textContent = "Buscando...";
         try {
           const resposta = await fetch(
-            URL_DO_WORKER + "?nome=" + encodeURIComponent(nome),
+            URL_DO_WORKER + "?nome=" + nome,
           );
           const dados = await resposta.json();
           status.textContent =
