@@ -2,88 +2,114 @@
 <html lang="pt-BR">
   <head>
     <meta charset="UTF-8" />
+
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
     <title>Olá, Nuvem</title>
+
     <style>
       body {
         margin: 0;
         min-height: 100vh;
         display: grid;
         place-items: center;
-        font-family: system-ui, sans-serif;
+        font-family: system-ui;
         background: #0f172a;
-        color: #f8fafc;
+        color: white;
       }
+
       main {
         text-align: center;
-        padding: 30px;
-        max-width: 520px;
       }
-      h1 {
-        font-size: 42px;
-        margin: 0 0 10px;
+
+      input {
+        padding: 10px;
+        margin: 20px;
       }
-      #status {
-        font-size: 18px;
-        color: #cbd5e1;
-        min-height: 54px;
-        line-height: 1.5;
-      }
+
       button {
-        margin-top: 18px;
-        background: #38bdf8;
-        color: #0f172a;
-        border: none;
         padding: 12px 22px;
-        border-radius: 10px;
-        font-size: 15px;
-        font-weight: 600;
+        margin: 5px;
         cursor: pointer;
       }
-      button:hover {
-        background: #7dd3fc;
+
+      #status {
+        margin-top: 20px;
+        font-size: 18px;
       }
     </style>
   </head>
+
   <body>
     <main>
       <h1>Olá, Nuvem</h1>
-      <p id="status">Carregando a resposta do servidor...</p>
-      <input type="text" id="nome" placeholder="Digite seu nome" />
-      <button id="btn">Buscar</button>
+
+      <input id="nome" placeholder="Digite seu nome" />
+
+      <br />
+
+      <button onclick="buscarHora()">Ver Hora</button>
+
+      <button onclick="buscarSorteio()">Sortear Número</button>
+
+      <p id="status">Clique em um botão.</p>
     </main>
 
     <script>
-      // PASSO DO MOVIMENTO 4:
-      // Troque o texto abaixo pela URL do SEU Worker (termina em .workers.dev).
-
-      const nome = document.getElementById("nome").value;
-
       const URL_DO_WORKER =
         "https://worker-cloud-api.israeljovemtech.workers.dev/";
 
-      async function buscar() {
+      async function buscarHora() {
         const status = document.getElementById("status");
+
+        const nome = document.getElementById("nome").value;
+
         status.textContent = "Buscando...";
+
         try {
           const resposta = await fetch(
-            URL_DO_WORKER + "?nome=" + nome,
+            URL_DO_WORKER + "hora?nome=" + encodeURIComponent(nome),
           );
+
+          // NOVO
+          if (!resposta.ok) {
+            status.textContent = "❌ A rota solicitada não foi encontrada.";
+
+            return;
+          }
+
           const dados = await resposta.json();
-          status.textContent =
-            dados.mensagem +
-            " Hora do servidor: " +
-            dados.horaDoServidor +
-            " Frase do dia: " +
-            dados.fraseDoDia;
-        } catch (erro) {
-          status.textContent =
-            "Não consegui falar com o Worker. Confira a URL.";
+
+          status.innerHTML = `<strong>${dados.mensagem}</strong><br><br>
+Hora: ${dados.horaDoServidor}<br>
+Frase: ${dados.fraseDoDia}`;
+        } catch {
+          status.textContent = "⚠ Não foi possível conectar ao Worker.";
         }
       }
 
-      document.getElementById("btn").addEventListener("click", buscar);
-      buscar();
+      async function buscarSorteio() {
+        const status = document.getElementById("status");
+
+        status.textContent = "Sorteando...";
+
+        try {
+          const resposta = await fetch(URL_DO_WORKER + "sorteio");
+
+          // NOVO
+          if (!resposta.ok) {
+            status.textContent = "❌ A rota solicitada não foi encontrada.";
+
+            return;
+          }
+
+          const dados = await resposta.json();
+
+          status.innerHTML = `Número sorteado: <strong>${dados.numero}</strong>`;
+        } catch {
+          status.textContent = "⚠ Não foi possível conectar ao Worker.";
+        }
+      }
     </script>
   </body>
 </html>
